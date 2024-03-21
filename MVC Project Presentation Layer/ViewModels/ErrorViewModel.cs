@@ -1,6 +1,6 @@
 using System;
 
-namespace MVC_Project_Presentation_Layer.Models
+namespace MVC_Project_Presentation_Layer.ViewModels
 {
     public class ErrorViewModel
     {
