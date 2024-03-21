@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>MVC_Project_Business_Logic_Layer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MVC Project Data Access Layer\MVC Project Data Access Layer.csproj" />
+  </ItemGroup>
+
+</Project>
