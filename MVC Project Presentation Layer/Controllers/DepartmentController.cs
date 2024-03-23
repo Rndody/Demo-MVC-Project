@@ -34,6 +34,15 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
 
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+            var department = departmentRepo.Get(id.Value);
+            if (department == null)
+                return NotFound();
+            return View(department);
+        }
 
 
     }
