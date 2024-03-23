@@ -14,6 +14,7 @@ namespace MVC_Project_Data_Access_Layer.Data
     {
         ///DbSets
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         ///Constructors
         /*   public ApplicationDbContext():base(new DbContextOptions<ApplicationDbContext>())
