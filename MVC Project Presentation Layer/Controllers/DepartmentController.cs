@@ -35,14 +35,14 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
 
-        public IActionResult Details(int? id, string ViewName="Details")
+        public IActionResult Details(int? id, string ViewName = "Details")
         {
             if (id == null)
                 return BadRequest();
             var department = departmentRepo.Get(id.Value);
             if (department == null)
                 return NotFound();
-            return View( ViewName ,department);
+            return View(ViewName, department);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -62,7 +62,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         public IActionResult Edit(Department department, [FromRoute] int id)
         {
 
-            if(id != department.Id) return BadRequest();
+            if (id != department.Id) return BadRequest();
             if (ModelState.IsValid)
             {
                 try
@@ -76,6 +76,32 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 }
             }
             return View(department);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int? id)
+
+        {
+            return Details(id, "Delete");
+
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Department department, [FromRoute] int id)
+        {
+
+            if (id != department.Id) return BadRequest();
+
+            try
+            {
+                departmentRepo.Delete(department);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (System.Exception exception)
+            {
+                ModelState.AddModelError(string.Empty , exception.Message);
+                return View(department);
+            }
         }
     }
 }
