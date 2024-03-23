@@ -12,7 +12,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
         ///Constructor
         public DepartmentController(IDepartmentRepository departmentRepository)
-        { departmentRepo = departmentRepository;        }
+        { departmentRepo = departmentRepository; }
 
         ///Methods
         public IActionResult Index()
@@ -23,9 +23,10 @@ namespace MVC_Project_Presentation_Layer.Controllers
         [HttpGet]
         public IActionResult Create() { return View(); }
         [HttpPost]
-        public IActionResult Create(Department  department) 
+        public IActionResult Create(Department department)
         {
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 departmentRepo.Add(department);
                 return RedirectToAction(nameof(Index));
 
@@ -43,7 +44,36 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 return NotFound();
             return View(department);
         }
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+            var department = departmentRepo.Get(id.Value);
+            if (department == null)
+                return NotFound();
+            return View(department);
+        }
 
 
+        [HttpPost]
+        public IActionResult Edit(Department department, [FromRoute] int id)
+        {
+
+            if(id != department.Id) return BadRequest();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    departmentRepo.Update(department);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (System.Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(department);
+        }
     }
 }
