@@ -35,28 +35,30 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
 
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id, string ViewName="Details")
         {
             if (id == null)
                 return BadRequest();
             var department = departmentRepo.Get(id.Value);
             if (department == null)
                 return NotFound();
-            return View(department);
+            return View( ViewName ,department);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            if (id == null)
-                return BadRequest();
-            var department = departmentRepo.Get(id.Value);
-            if (department == null)
-                return NotFound();
-            return View(department);
+            //if (id == null)
+            //    return BadRequest();
+            //var department = departmentRepo.Get(id.Value);
+            //if (department == null)
+            //    return NotFound();
+            //return View(department);
+            return Details(id, "Edit");
         }
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Department department, [FromRoute] int id)
         {
 
