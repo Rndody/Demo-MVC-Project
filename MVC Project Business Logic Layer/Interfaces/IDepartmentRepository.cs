@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Business_Logic_Layer.Interfaces
 {
-    internal interface IDepartmentRepository
+    public interface IDepartmentRepository
     {
         //define 5 signatures for 5 methods
         IEnumerable<Department> GetAll();

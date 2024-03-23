@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MVC_Project_Business_Logic_Layer.Interfaces;
+using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Data;
 using System;
 using System.Collections.Generic;
@@ -30,6 +32,8 @@ namespace MVC_Project_Presentation_Layer
 
 
             services.AddControllersWithViews();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
 
 
             //services.AddScoped<ApplicationDbContext>();     
