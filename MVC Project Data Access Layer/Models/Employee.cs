@@ -22,9 +22,9 @@ namespace MVC_Project_Data_Access_Layer.Models
         [EnumMember(Value = "PartTime")]
         PartTime = 2
     }
-    public class Employee
+    public class Employee : ModelBase
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
         // by default [Convention] EF will make it PK  and use identity constrain  starts from 1 and increment by 1
 
         /*Note: those validation attributes should be written in the View-Model not in the Model/Entity class

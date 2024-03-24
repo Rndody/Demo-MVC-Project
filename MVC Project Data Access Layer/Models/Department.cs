@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Data_Access_Layer.Models
 {
-    public class Department
+    public class Department: ModelBase
     {
-        public int Id { get; set; }// for us as developes won't show for end user
+      //  public int Id { get; set; }// for us as developes won't show for end user
 
         public string Code { get; set; } //  end user can deal with it 
 
