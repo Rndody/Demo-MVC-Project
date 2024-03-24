@@ -33,7 +33,8 @@ namespace MVC_Project_Data_Access_Layer.Data
          if you need the request send from application to database to contain more than one Query [return more than one result set] =>  MultipleActiveResultSets= True  */
         protected override void OnModelCreating(ModelBuilder modelBuilder)
       => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            //modelBuilder.ApplyConfiguration<Department>(new DepartmentConfigurations()); //adding them one by one
+        //modelBuilder.ApplyConfiguration<Department>(new DepartmentConfigurations()); //adding them one by one
+        //modelBuilder.ApplyConfiguration<Employee>(new EmployeeConfigurations()); //adding them one by one
 
     }
 }

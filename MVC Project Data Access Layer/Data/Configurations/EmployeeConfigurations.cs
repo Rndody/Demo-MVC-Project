@@ -20,8 +20,15 @@ namespace MVC_Project_Data_Access_Layer.Data.Configurations
 
             builder.Property(E => E.Gender).HasConversion
                 (
-                (Gender) => Gender.ToString(),
-               (genderAsString) => (Gender)Enum.Parse(typeof(Gender), genderAsString, true)
+                     (Gender) => Gender.ToString(), //to set in database => the value goes as string 
+                     (genderAsString) => (Gender)Enum.Parse(typeof(Gender), genderAsString, true) // to get  // parse it from string [as it comes from databae as string] to Gender
+                );
+
+            builder.Property(E => E.EmployeeType).HasConversion
+                (
+                    (EmployeeType) => EmployeeType.ToString(),
+                    (employeeTypeAsString) => (EmployeeType)Enum.Parse(typeof(EmployeeType), employeeTypeAsString, true)
+                    //Parse return object so we cast it to the enum type [EmployeeType] // the true is for ignoring case sensitivity   
                 );
         }
     }
