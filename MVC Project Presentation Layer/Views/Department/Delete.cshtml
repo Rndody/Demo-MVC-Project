@@ -1,0 +1,16 @@
+﻿@model Department
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Are U Sure?</h1>
+<div  asp-validation-summary="All"> </div>
+
+<form asp-action="Delete">
+
+    <partial name="PartialViews/DetailsDeleteDepartmentPartial" />
+
+
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-controller="Department" asp-action="Index" class="btn btn-info"> Cancel</a>
+</form>

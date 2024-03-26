@@ -5,33 +5,33 @@ using MVC_Project_Data_Access_Layer.Models;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
-    public class DepartmentController : Controller
+    public class EmployeeController : Controller
     {
 
-        private readonly IDepartmentRepository departmentRepo;
+        private readonly IEmployeeRepository employeeRepo;
 
         ///Constructor
-        public DepartmentController(IDepartmentRepository departmentRepository)
-        { departmentRepo = departmentRepository; }
+        public EmployeeController(IEmployeeRepository employeeRepository)
+        { employeeRepo = employeeRepository; }
 
         ///Methods
         public IActionResult Index()
         {
-            var departments = departmentRepo.GetAll();
-            return View(departments);
+            var employees = employeeRepo.GetAll();
+            return View(employees);
         }
         [HttpGet]
         public IActionResult Create() { return View(); }
         [HttpPost]
-        public IActionResult Create(Department department)
+        public IActionResult Create(Employee employee)
         {
             if (ModelState.IsValid)
             {
-                departmentRepo.Add(department);
+                employeeRepo.Add(employee);
                 return RedirectToAction(nameof(Index));
 
             }
-            return View(department);
+            return View(employee);
         }
 
 
@@ -39,36 +39,36 @@ namespace MVC_Project_Presentation_Layer.Controllers
         {
             if (id == null)
                 return BadRequest();
-            var department = departmentRepo.Get(id.Value);
-            if (department == null)
+            var employee = employeeRepo.Get(id.Value);
+            if (employee == null)
                 return NotFound();
-            return View(ViewName, department);
+            return View(ViewName, employee);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-           ///if (id == null)
-           ///    return BadRequest();
-           ///var department = departmentRepo.Get(id.Value);
-           ///if (department == null)
-           ///    return NotFound();
-           ///return View(department);
-           ///
+            ///if (id == null)
+            ///    return BadRequest();
+            ///var employee = employeeRepo.Get(id.Value);
+            ///if (employee == null)
+            ///    return NotFound();
+            ///return View(employee);
+            ///
 
             return Details(id, "Edit");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Department department, [FromRoute] int id)
+        public IActionResult Edit(Employee employee, [FromRoute] int id)
         {
 
-            if (id != department.Id) return BadRequest();
+            if (id != employee.Id) return BadRequest();
             if (ModelState.IsValid)
             {
                 try
                 {
-                    departmentRepo.Update(department);
+                    employeeRepo.Update(employee);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception exception)
@@ -76,7 +76,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(department);
+            return View(employee);
         }
 
         [HttpGet]
@@ -88,21 +88,23 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(Department department, [FromRoute] int id)
+        public IActionResult Delete(Employee employee, [FromRoute] int id)
         {
 
-            if (id != department.Id) return BadRequest();
+            if (id != employee.Id) return BadRequest();
 
             try
             {
-                departmentRepo.Delete(department);
+                employeeRepo.Delete(employee);
                 return RedirectToAction(nameof(Index));
             }
             catch (System.Exception exception)
             {
-                ModelState.AddModelError(string.Empty , exception.Message);
-                return View(department);
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View(employee);
             }
         }
+
+
     }
 }
