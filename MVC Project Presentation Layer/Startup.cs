@@ -33,6 +33,7 @@ namespace MVC_Project_Presentation_Layer
 
             services.AddControllersWithViews();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 
 

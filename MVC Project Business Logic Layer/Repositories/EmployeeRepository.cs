@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Business_Logic_Layer.Repositories
 {
-<<<<<<< HEAD
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {
        // private readonly ApplicationDbContext dbContext; 
@@ -58,41 +57,37 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
         //     return dbContext.SaveChanges();
         // } 
         #endregion
-=======
-    public class EmployeeRepository : IEmployeeRepository
-    {
-        private readonly ApplicationDbContext dbContext;
 
-        public EmployeeRepository(ApplicationDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        //public class EmployeeRepository : IEmployeeRepository
+        //{
+        // private readonly ApplicationDbContext dbContext;
 
-        public int Add(Employee entity)
-        {
-            dbContext.Employees.Add(entity);
-            return dbContext.SaveChanges();
-        }
+        #region Conflict code ...delete later
+       // public int Add(Employee entity)
+       // {
+       //     dbContext.Employees.Add(entity);
+       //     return dbContext.SaveChanges();
+       // }
 
-        public int Delete(Employee entity)
-        {
-            dbContext.Employees.Remove(entity);
-            return dbContext.SaveChanges();
-        }
+       // public int Delete(Employee entity)
+       // {
+       //     dbContext.Employees.Remove(entity);
+       //     return dbContext.SaveChanges();
+       // }
 
-        public Employee Get(int id)
-       => dbContext.Employees.Find(id);
-        // var Employee = dbContext.Employees.Where(E => E.Id == id).FirstOrDefault();        
+       // public Employee Get(int id)
+       //=> dbContext.Employees.Find(id);
+       // // var Employee = dbContext.Employees.Where(E => E.Id == id).FirstOrDefault();        
 
-        public IEnumerable<Employee> GetAll()
-        => dbContext.Employees.AsNoTracking().ToList();
+       // public IEnumerable<Employee> GetAll()
+       // => dbContext.Employees.AsNoTracking().ToList();
 
 
-        public int Update(Employee entity)
-        {
-            dbContext.Employees.Update(entity);
-            return dbContext.SaveChanges();
-        }
->>>>>>> 8eaa86c47c79ef6034d73584dcd826bf4e2c306a
+       // public int Update(Employee entity)
+       // {
+       //     dbContext.Employees.Update(entity);
+       //     return dbContext.SaveChanges();
+       // } 
+        #endregion
     }
 }
