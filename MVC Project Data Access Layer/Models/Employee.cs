@@ -37,7 +37,7 @@ namespace MVC_Project_Data_Access_Layer.Models
         [Range(22, 30 /*, ErrorMessage = "Age Must be in Range From 22 To 35"*/)]
         public int? Age { get; set; }
 
-        [RegularExpression(@"^(\d{1,3}-){2}[a-zA-Z]{2,15}-[0-9]{2}-[a-zA-Z]{4,10}-[a-zA-Z]{2,15}$", //usually we get those RE from websites or ChatGPT
+        [RegularExpression(@"^(\d{1,3}-)[a-zA-Z]{2,15}-[a-zA-Z]{4,10}-[a-zA-Z]{2,15}$", //usually we get those RE from websites or ChatGPT
            ErrorMessage = "Address Must Be Like 123-Street-City-Country")]
         public string Address { get; set; }
 

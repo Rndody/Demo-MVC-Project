@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Business_Logic_Layer.Interfaces
 {
-<<<<<<< HEAD
+
     public interface IEmployeeRepository : IGenericRepository<Employee>   //public as we need to use it outside BLL 
     {
-        /*IEnumerable*/  IQueryable <Employee> GetEmployeesByAddress(string address);
+        /*IEnumerable*/
+        IQueryable<Employee> GetEmployeesByAddress(string address);
         /*Note: not to use IEnumerable
          * when implementing the method => write LINQ Query  [employees with that address]
          * which will lead to retriving all data and filtering in the application not in the database
@@ -27,15 +28,6 @@ namespace MVC_Project_Business_Logic_Layer.Interfaces
         //int Update(Employee entity);
         //int Delete(Employee entity); 
         #endregion
-=======
-    public interface IEmployeeRepository  //public as we need to use it outside BLL 
-    {
-        //define 5 signatures for 5 methods
-        IEnumerable<Employee> GetAll();
-        Employee Get(int id);
-        int Add(Employee entity);
-        int Update(Employee entity);
-        int Delete(Employee entity);
->>>>>>> 8eaa86c47c79ef6034d73584dcd826bf4e2c306a
     }
+   
 }
