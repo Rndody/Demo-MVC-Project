@@ -17,13 +17,16 @@ namespace MVC_Project_Presentation_Layer.Controllers
         ///Methods
         public IActionResult Index() //HttpGet
         {
-            // 1-ViewData
-            ViewData["Message"] = "ViewData";  //sending extra info 
-            // ====== key ======== value ====
+            ///1-ViewData
+            ///ViewData["Message"] = "ViewData";  //sending extra info 
+            /// ====== key ======== value ====
 
-            // 2-ViewBag
-            ViewBag.Message = "ViewBag";
-            //this property msg will override the ViewData msg as both of them deal with the same place and the ViewBag is written after ViewData
+            /// 2-ViewBag
+            ///  ViewBag.Message = "ViewBag";
+            ///this property msg will override the ViewData msg as both of them deal with the same place and the ViewBag is written after ViewData
+
+            ///3-TempData
+            TempData.Keep(); //to keep msg sent from previous  action[request]
 
             var employees = employeeRepo.GetAll();
             return View(employees); //send main info [model]
@@ -31,12 +34,17 @@ namespace MVC_Project_Presentation_Layer.Controllers
         [HttpGet]
         public IActionResult Create() { return View(); }
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(Employee employee)///Create --- 1st action [request]
         {
             if (ModelState.IsValid)
             {
-                employeeRepo.Add(employee);
-                return RedirectToAction(nameof(Index));
+                var count = employeeRepo.Add(employee);
+                ///TempData
+                if (count > 0)
+                    TempData["Message"] = "Created Successfully";//info we need to send to 2nd request
+                else
+                    TempData["Message"] = "Failed to create";//info we need to send to 2nd request
+                return RedirectToAction(nameof(Index));/// Index --- 2nd action [request]
             }
             return View(employee);
         }
