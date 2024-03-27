@@ -15,10 +15,18 @@ namespace MVC_Project_Presentation_Layer.Controllers
         { employeeRepo = employeeRepository; }
 
         ///Methods
-        public IActionResult Index()
+        public IActionResult Index() //HttpGet
         {
+            // 1-ViewData
+            ViewData["Message"] = "ViewData";  //sending extra info 
+            // ====== key ======== value ====
+
+            // 2-ViewBag
+            ViewBag.Message = "ViewBag";
+            //this property msg will override the ViewData msg as both of them deal with the same place and the ViewBag is written after ViewData
+
             var employees = employeeRepo.GetAll();
-            return View(employees);
+            return View(employees); //send main info [model]
         }
         [HttpGet]
         public IActionResult Create() { return View(); }
