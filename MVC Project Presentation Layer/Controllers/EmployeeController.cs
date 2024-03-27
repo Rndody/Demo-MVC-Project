@@ -37,7 +37,6 @@ namespace MVC_Project_Presentation_Layer.Controllers
             {
                 employeeRepo.Add(employee);
                 return RedirectToAction(nameof(Index));
-
             }
             return View(employee);
         }
