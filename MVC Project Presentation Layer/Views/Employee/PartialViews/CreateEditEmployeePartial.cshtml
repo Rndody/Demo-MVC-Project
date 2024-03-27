@@ -1,6 +1,8 @@
 ﻿@model Employee
+@inject IDepartmentRepository departmentsRepository
+
 @{
-    var departments = new SelectList(ViewData["Departments"] as IEnumerable<Department>,nameof(Department.Id) ,  nameof(Department.Name)     );
+    var departments = new SelectList(departmentsRepository.GetAll(), nameof(Department.Id), nameof(Department.Name));
 }
 <div class="form-group">
     <label asp-for="Name" class="col-form-label"></label>

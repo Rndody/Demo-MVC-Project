@@ -28,7 +28,7 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
         public int Update(T entity)
         {
             dbContext.Set<T>().Update(entity);
-           // dbContext.Update(entity);//EF core 3.1 new feature
+            // dbContext.Update(entity);//EF core 3.1 new feature
             return dbContext.SaveChanges();
         }
 
@@ -44,7 +44,13 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
         // var Employee = dbContext.Employees.Where(E => E.Id == id).FirstOrDefault();        
 
         public IEnumerable<T> GetAll()
-        => dbContext.Set<T>().AsNoTracking().ToList();
+        {
+            if (typeof(T) == typeof(Employee))
+                return (IEnumerable<T>)  dbContext.Employees.Include(E => E.Department).AsNoTracking();
+            //note: casting to IEnumerable<T> from  IEnumerable<Employee>
+            else
+                return dbContext.Set<T>().AsNoTracking().ToList();
+        }
 
 
     }
