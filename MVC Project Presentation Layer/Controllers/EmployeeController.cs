@@ -9,10 +9,14 @@ namespace MVC_Project_Presentation_Layer.Controllers
     {
 
         private readonly IEmployeeRepository employeeRepo;
+        private readonly IDepartmentRepository departmentRepository;
 
         ///Constructor
-        public EmployeeController(IEmployeeRepository employeeRepository)
-        { employeeRepo = employeeRepository; }
+        public EmployeeController(IEmployeeRepository employeeRepository , IDepartmentRepository departmentRepository)
+        {
+            employeeRepo = employeeRepository;
+            this.departmentRepository = departmentRepository;
+        }
 
         ///Methods
         public IActionResult Index() //HttpGet
@@ -32,7 +36,12 @@ namespace MVC_Project_Presentation_Layer.Controllers
             return View(employees); //send main info [model]
         }
         [HttpGet]
-        public IActionResult Create() { return View(); }
+        public IActionResult Create()
+        {
+            ViewData["Departments"]=departmentRepository.GetAll();
+            //send the departments object as extra info we can't send it as model because we are [Binding] dealing with Employee Model 
+            return View(); 
+        }
         [HttpPost]
         public IActionResult Create(Employee employee)///Create --- 1st action [request]
         {
@@ -69,7 +78,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
             ///    return NotFound();
             ///return View(employee);
             ///
-
+            ViewData["Departments"] = departmentRepository.GetAll();
             return Details(id, "Edit");
         }
 
