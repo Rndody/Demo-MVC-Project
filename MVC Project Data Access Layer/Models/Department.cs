@@ -28,7 +28,6 @@ namespace MVC_Project_Data_Access_Layer.Models
         //so we say this property = new HashSet<Employee>() => [Initialize the Employees propery- in object]
         #endregion
 
-
         #region for discussion
 
         /*  public int Id { get; set; }// for us as developes won't show for end user
