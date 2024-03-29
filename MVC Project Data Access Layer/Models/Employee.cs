@@ -81,7 +81,7 @@ namespace MVC_Project_Data_Access_Layer.Models
 
         #region Foreign  Key
         /* [ForeignKey("Department")] *///no need to use Data-annotation for FK as the name on the property is EntityID [DepartmentId]
-        public int? DepartmentId { get; set; }
+       public int? DepartmentId { get; set; }
         /*when we make the FK nullable --> the on-delete role of the relationship will be restricte
           restrict means when you delete department that has employees --> will get error [no-action] 
         now we need to allow null and cascade on delete --> fluent API*/
@@ -90,7 +90,7 @@ namespace MVC_Project_Data_Access_Layer.Models
         #region Navigional Property [One]
         /*  [InverseProperty(nameof(Models.Department.Employees))]*/ // use it if we have more than one relationship between the same Enities
                                                                      //we write the class with the namespace as we have a property with the same name as the class 
-        public Department Department { get; set; }
+    //    public Department Department { get; set; }
         #endregion
 
     }

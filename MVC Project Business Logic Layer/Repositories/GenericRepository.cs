@@ -51,7 +51,5 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
             else
                 return dbContext.Set<T>().AsNoTracking().ToList();
         }
-
-
     }
 }

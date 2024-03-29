@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Data;
+using MVC_Project_Presentation_Layer.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,21 @@ namespace MVC_Project_Presentation_Layer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-            { options.UseSqlServer(Configuration.GetConnectionString("DefaultRndodyConnecton"));        }   );
-
+            { options.UseSqlServer(Configuration.GetConnectionString("DefaultRndodyConnecton")); });
 
             services.AddControllersWithViews();
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
+            #region Added from Extensions Folder 
+            ///Deleted from here and added in the extension folder class
+            ///services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            ///services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            ///call it through class
+            ///  ApplicationServicesExtensions.AddApplicationServices(services); //call as static method
+
+            ///call it as extension method
+            services.AddApplicationServices();
+            #endregion
 
 
             //services.AddScoped<ApplicationDbContext>();     
