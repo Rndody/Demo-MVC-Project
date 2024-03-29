@@ -90,7 +90,7 @@ namespace MVC_Project_Data_Access_Layer.Models
         #region Navigional Property [One]
         /*  [InverseProperty(nameof(Models.Department.Employees))]*/ // use it if we have more than one relationship between the same Enities
                                                                      //we write the class with the namespace as we have a property with the same name as the class 
-    //    public Department Department { get; set; }
+     public Department Department { get; set; }
         #endregion
 
     }

@@ -2,6 +2,7 @@
 using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Models;
+using System.Linq;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
@@ -19,8 +20,14 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
         ///Methods
-        public IActionResult Index() //HttpGet
+        public IActionResult Index(string searchInput) //HttpGet
         {
+            var employees = Enumerable.Empty<Employee>();
+            if (string.IsNullOrEmpty(searchInput))
+                employees = employeeRepo.GetAll();
+            else
+                employees = employeeRepo.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
+            return View(employees);
             ///1-ViewData
             ///ViewData["Message"] = "ViewData";  //sending extra info 
             /// ====== key ======== value ====
@@ -30,17 +37,15 @@ namespace MVC_Project_Presentation_Layer.Controllers
             ///this property msg will override the ViewData msg as both of them deal with the same place and the ViewBag is written after ViewData
 
             ///3-TempData
-            TempData.Keep(); //to keep msg sent from previous  action[request]
+            /// TempData.Keep(); //to keep msg sent from previous  action[request]
 
-            var employees = employeeRepo.GetAll();
-            return View(employees); //send main info [model]
         }
         [HttpGet]
         public IActionResult Create()
         {
             //ViewData["Departments"]=departmentRepository.GetAll();
             //send the departments object as extra info we can't send it as model because we are [Binding] dealing with Employee Model 
-            return View(); 
+            return View();
         }
         [HttpPost]
         public IActionResult Create(Employee employee)///Create --- 1st action [request]

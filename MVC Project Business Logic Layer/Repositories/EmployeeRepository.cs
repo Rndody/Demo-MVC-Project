@@ -12,17 +12,20 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
 {
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {
-       // private readonly ApplicationDbContext dbContext; 
+        // private readonly ApplicationDbContext dbContext; 
         //we created that attribute because we can't use the dbContext send to the constractor as it is parameter
         //already inherited from parent [privateprotected ]
         public EmployeeRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-          //  this.dbContext = dbContext; //inherited from parent no need to do it 
+            //  this.dbContext = dbContext; //inherited from parent no need to do it 
         }
         public IQueryable<Employee> GetEmployeesByAddress(string address)
         {
-           return dbContext.Employees.Where(E => E.Address.ToLower() == address.ToLower());
+            return dbContext.Employees.Where(E => E.Address.ToLower() == address.ToLower());
         }
+
+        public IQueryable<Employee> SearchByName(string name)
+               => dbContext.Employees.Where(E=>E.Name.ToLower().Contains(name) );
         #region Deleted Code
         // private readonly ApplicationDbContext dbContext;
 
@@ -63,31 +66,31 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
         // private readonly ApplicationDbContext dbContext;
 
         #region Conflict code ...delete later
-       // public int Add(Employee entity)
-       // {
-       //     dbContext.Employees.Add(entity);
-       //     return dbContext.SaveChanges();
-       // }
+        // public int Add(Employee entity)
+        // {
+        //     dbContext.Employees.Add(entity);
+        //     return dbContext.SaveChanges();
+        // }
 
-       // public int Delete(Employee entity)
-       // {
-       //     dbContext.Employees.Remove(entity);
-       //     return dbContext.SaveChanges();
-       // }
+        // public int Delete(Employee entity)
+        // {
+        //     dbContext.Employees.Remove(entity);
+        //     return dbContext.SaveChanges();
+        // }
 
-       // public Employee Get(int id)
-       //=> dbContext.Employees.Find(id);
-       // // var Employee = dbContext.Employees.Where(E => E.Id == id).FirstOrDefault();        
+        // public Employee Get(int id)
+        //=> dbContext.Employees.Find(id);
+        // // var Employee = dbContext.Employees.Where(E => E.Id == id).FirstOrDefault();        
 
-       // public IEnumerable<Employee> GetAll()
-       // => dbContext.Employees.AsNoTracking().ToList();
+        // public IEnumerable<Employee> GetAll()
+        // => dbContext.Employees.AsNoTracking().ToList();
 
 
-       // public int Update(Employee entity)
-       // {
-       //     dbContext.Employees.Update(entity);
-       //     return dbContext.SaveChanges();
-       // } 
+        // public int Update(Employee entity)
+        // {
+        //     dbContext.Employees.Update(entity);
+        //     return dbContext.SaveChanges();
+        // } 
         #endregion
     }
 }
