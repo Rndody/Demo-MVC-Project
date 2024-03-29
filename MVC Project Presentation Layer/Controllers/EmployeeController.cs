@@ -20,7 +20,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
         ///Methods
-        public IActionResult Index(string searchInput) //HttpGet
+        public IActionResult Index(string searchInput) //HttpGet or HttpPost in case of Search 
         {
             var employees = Enumerable.Empty<Employee>();
             if (string.IsNullOrEmpty(searchInput))
@@ -28,6 +28,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
             else
                 employees = employeeRepo.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
             return View(employees);
+
             ///1-ViewData
             ///ViewData["Message"] = "ViewData";  //sending extra info 
             /// ====== key ======== value ====
