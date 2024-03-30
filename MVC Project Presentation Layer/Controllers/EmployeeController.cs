@@ -12,13 +12,16 @@ namespace MVC_Project_Presentation_Layer.Controllers
     public class EmployeeController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IEmployeeRepository employeeRepo;
+        private readonly IUnitOfWork unitOfWork;
+
+        //  private readonly IEmployeeRepository employeeRepo;
         //private readonly IDepartmentRepository departmentRepository;
         ///Constructor
-        public EmployeeController(IMapper mapper, IEmployeeRepository employeeRepository /*, IDepartmentRepository departmentRepository*/)
+        public EmployeeController(  IMapper mapper, IUnitOfWork unitOfWork/*,IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository*/     )
         {
             this.mapper = mapper;
-            employeeRepo = employeeRepository;
+            this.unitOfWork = unitOfWork;
+            //employeeRepo = employeeRepository;
             //this.departmentRepository = departmentRepository;
         }
 
@@ -27,9 +30,9 @@ namespace MVC_Project_Presentation_Layer.Controllers
         {
             var employees = Enumerable.Empty<Employee>();
             if (string.IsNullOrEmpty(searchInput))
-                employees = employeeRepo.GetAll();
+                employees = unitOfWork.EmployeeRepository.GetAll();
             else
-                employees = employeeRepo.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
+                employees = unitOfWork.EmployeeRepository.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
 
             var mappedEmps = mapper.Map<   IEnumerable<Employee>, IEnumerable< EmployeeViewModel >  > (employees);
 
@@ -81,7 +84,9 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 /* the automapper need to learn how to make mapping for my classes so we make a profile
                  * create Helper Folder that contains helper classes in the PL ----> create MappingProfiles class
                  */
-                var count = employeeRepo.Add(mappedEmp);
+              //  var count = employeeRepo.Add(mappedEmp);
+              unitOfWork.EmployeeRepository.Add(mappedEmp);
+                var count = unitOfWork.Complete(); //replaces SaveChanges(); which returns no. of rows affected
                 ///TempData
                 if (count > 0)
                     TempData["Message"] = "Created Successfully";//info we need to send to 2nd request
@@ -97,7 +102,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         {
             if (id == null)
                 return BadRequest();
-            var employee = employeeRepo.Get(id.Value);
+            var employee = unitOfWork.EmployeeRepository.Get(id.Value);
 
             var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
 
@@ -130,8 +135,8 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 try
                 {
                     var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-
-                    employeeRepo.Update(mappedEmp);
+                    unitOfWork.EmployeeRepository.Update(mappedEmp);
+                    unitOfWork.Complete();//remember we removed the savechanges from the methods in the repository so we need to use it here 
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception exception)
@@ -160,7 +165,8 @@ namespace MVC_Project_Presentation_Layer.Controllers
             {
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
 
-                employeeRepo.Delete(mappedEmp);
+                unitOfWork.EmployeeRepository.Delete(mappedEmp);
+                unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             catch (System.Exception exception)

@@ -1,8 +1,9 @@
 ﻿@model EmployeeViewModel
-@inject IDepartmentRepository departmentsRepository
+@* @inject IDepartmentRepository departmentsRepository *@
+@inject IUnitOfWork unitOfWork
 
 @{
-    var departments = new SelectList(departmentsRepository.GetAll(), nameof(Department.Id), nameof(Department.Name));
+    var departments = new SelectList(unitOfWork.DepartmentRepository.GetAll(), nameof(Department.Id), nameof(Department.Name));
 }
 <div class="form-group">
     <label asp-for="Name" class="col-form-label"></label>

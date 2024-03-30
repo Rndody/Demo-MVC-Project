@@ -8,6 +8,7 @@ namespace MVC_Project_Presentation_Layer.ViewModels
     {
 
         #region Properties
+        public int Id { get; set; }
         public string Code { get; set; } 
         public string Name { get; set; }
         public DateTime DateOfCreation { get; set; }

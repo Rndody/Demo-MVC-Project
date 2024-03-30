@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Data;
-using MVC_Project_Presentation_Layer.Extensions;
 using MVC_Project_Presentation_Layer.Helpers;
 using System;
 using System.Collections.Generic;

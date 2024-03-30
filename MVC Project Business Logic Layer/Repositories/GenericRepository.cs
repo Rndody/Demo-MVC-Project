@@ -19,24 +19,24 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
             this.dbContext = dbContext;
         }
 
-        public int Add(T entity)
+        public void Add(T entity)
         {
             // dbContext.Set<T>().Add(entity);
             dbContext.Add(entity);
-            return dbContext.SaveChanges();
+           // return dbContext.SaveChanges();
         }
-        public int Update(T entity)
+        public void Update(T entity)
         {
             dbContext.Set<T>().Update(entity);
             // dbContext.Update(entity);//EF core 3.1 new feature
-            return dbContext.SaveChanges();
+            //return dbContext.SaveChanges();
         }
 
-        public int Delete(T entity)
+        public void Delete(T entity)
         {
             //dbContext.Set<T>().Remove(entity);
             dbContext.Remove(entity);
-            return dbContext.SaveChanges();
+          //  return dbContext.SaveChanges();
         }
 
         public T Get(int id)
