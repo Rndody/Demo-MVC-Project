@@ -25,8 +25,7 @@ namespace MVC_Project_Data_Access_Layer.Models
     }
     public class Employee : ModelBase
     {
-        #region Properties
-        
+        #region Properties        
         public string Name { get; set; }
         public int? Age { get; set; }
         public string Address { get; set; }
@@ -35,17 +34,16 @@ namespace MVC_Project_Data_Access_Layer.Models
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime HireDate { get; set; }
+        #region Properties that won't be mapped in the ViewModel will take default values in the Model
         public DateTime CreationDate { get; set; } = DateTime.Now;
-        public bool IsDeleted { get; set; } = false; // won't be displayed for end user 
+        public bool IsDeleted { get; set; } = false; // won't be displayed for end user  
+        #endregion
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
-
         #endregion
-
         #region Foreign  Key
         public int? DepartmentId { get; set; }       
         #endregion
-
         #region Navigional Property [One]        
         public Department Department { get; set; }
         #endregion

@@ -9,6 +9,7 @@ using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Data;
 using MVC_Project_Presentation_Layer.Extensions;
+using MVC_Project_Presentation_Layer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,10 @@ namespace MVC_Project_Presentation_Layer
             services.AddApplicationServices();
             #endregion
 
+            services.AddAutoMapper(M =>M.AddProfile   (new MappingProfiles()   )   ) ;
+            //when creating object fromclass implements  IMapper ... add our profile class to it 
 
+            #region Commented Code
             //services.AddScoped<ApplicationDbContext>();     
             //services.AddScoped<DbContextOptions<ApplicationDbContext>>();
 
@@ -53,7 +57,8 @@ namespace MVC_Project_Presentation_Layer
             // takes 3 parameters and the 3 have default values so no need to send them unless you need to change the default values
 
             /* the 1st parameter action void method DbContextOptionsBuilder which is in the DbContext class in the OnConfiguring method
-             * which means we can send the connection string in this method instead of overriding the OnConfiguring method */
+             * which means we can send the connection string in this method instead of overriding the OnConfiguring method */ 
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

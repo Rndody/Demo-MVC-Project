@@ -1,33 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Models;
+using MVC_Project_Presentation_Layer.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
     public class EmployeeController : Controller
     {
-
+        private readonly IMapper mapper;
         private readonly IEmployeeRepository employeeRepo;
         //private readonly IDepartmentRepository departmentRepository;
-
         ///Constructor
-        public EmployeeController(IEmployeeRepository employeeRepository /*, IDepartmentRepository departmentRepository*/)
+        public EmployeeController(IMapper mapper, IEmployeeRepository employeeRepository /*, IDepartmentRepository departmentRepository*/)
         {
+            this.mapper = mapper;
             employeeRepo = employeeRepository;
             //this.departmentRepository = departmentRepository;
         }
 
         ///Methods
-        public IActionResult Index(string searchInput) //HttpGet or HttpPost in case of Search 
+        public IActionResult Index(string searchInput) //[HttpGet] or [HttpPost in case of Search] 
         {
             var employees = Enumerable.Empty<Employee>();
             if (string.IsNullOrEmpty(searchInput))
                 employees = employeeRepo.GetAll();
             else
                 employees = employeeRepo.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
-            return View(employees);
+
+            var mappedEmps = mapper.Map<   IEnumerable<Employee>, IEnumerable< EmployeeViewModel >  > (employees);
+
+            return View(mappedEmps);
 
             ///1-ViewData
             ///ViewData["Message"] = "ViewData";  //sending extra info 
@@ -49,11 +55,33 @@ namespace MVC_Project_Presentation_Layer.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Employee employee)///Create --- 1st action [request]
+        public IActionResult Create(EmployeeViewModel employeeVM)///Create --- 1st action [request]
         {
             if (ModelState.IsValid)
             {
-                var count = employeeRepo.Add(employee);
+                ///Manual Mapping                
+                ///1st way --->
+                ///var mappedEmp = new Employee()
+                ///{
+                ///    Name = employeeVM.Name,
+                ///    Age = employeeVM.Age,
+                ///    Address = employeeVM.Address,
+                ///    Salary = employeeVM.Salary,
+                ///    Email = employeeVM.Email,
+                ///    PhoneNumber = employeeVM.PhoneNumber,
+                ///    IsActive = employeeVM.IsActive,
+                ///    HireDate = employeeVM.HireDate,
+                ///};               
+                ///2nd way ---> overload the casting operator                
+                /// Employee mappedEmp = (Employee) employeeVM;
+                /// 
+           //------------------------------------------------------------------------
+                ///AutoMapper
+                var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
+                /* the automapper need to learn how to make mapping for my classes so we make a profile
+                 * create Helper Folder that contains helper classes in the PL ----> create MappingProfiles class
+                 */
+                var count = employeeRepo.Add(mappedEmp);
                 ///TempData
                 if (count > 0)
                     TempData["Message"] = "Created Successfully";//info we need to send to 2nd request
@@ -61,7 +89,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                     TempData["Message"] = "Failed to create";//info we need to send to 2nd request
                 return RedirectToAction(nameof(Index));/// Index --- 2nd action [request]
             }
-            return View(employee);
+            return View(employeeVM);
         }
 
 
@@ -70,9 +98,12 @@ namespace MVC_Project_Presentation_Layer.Controllers
             if (id == null)
                 return BadRequest();
             var employee = employeeRepo.Get(id.Value);
+
+            var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
+
             if (employee == null)
                 return NotFound();
-            return View(ViewName, employee);
+            return View(ViewName, mappedEmp);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -90,15 +121,17 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Employee employee, [FromRoute] int id)
+        public IActionResult Edit(EmployeeViewModel employeeVM, [FromRoute] int id)
         {
 
-            if (id != employee.Id) return BadRequest();
+            if (id != employeeVM.Id) return BadRequest();
             if (ModelState.IsValid)
             {
                 try
                 {
-                    employeeRepo.Update(employee);
+                    var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
+
+                    employeeRepo.Update(mappedEmp);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception exception)
@@ -106,7 +139,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(employee);
+            return View(employeeVM);
         }
 
         [HttpGet]
@@ -118,20 +151,22 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(Employee employee, [FromRoute] int id)
+        public IActionResult Delete(EmployeeViewModel employeeVM, [FromRoute] int id)
         {
 
-            if (id != employee.Id) return BadRequest();
+            if (id != employeeVM.Id) return BadRequest();
 
             try
             {
-                employeeRepo.Delete(employee);
+                var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
+
+                employeeRepo.Delete(mappedEmp);
                 return RedirectToAction(nameof(Index));
             }
             catch (System.Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View(employee);
+                return View(employeeVM);
             }
         }
 
