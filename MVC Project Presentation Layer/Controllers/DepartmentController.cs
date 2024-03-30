@@ -24,7 +24,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         public IActionResult Index()
         {
             //------------ NullReferenceException: Object reference not set to an instance of an object in line 27!!!!
-            var departments = unitOfWork.DepartmentRepository.GetAll();
+            var departments = unitOfWork.Repository<Department>().GetAll();
 
             var mappedDeps = mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
 
@@ -42,7 +42,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
             if (ModelState.IsValid)
             {
             var mappedDep = mapper.Map<DepartmentViewModel,Department>(departmentVM);
-                unitOfWork.DepartmentRepository.Add(mappedDep);
+                unitOfWork.Repository<Department>().Add(mappedDep);
                 var count = unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
 
@@ -56,7 +56,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         {
             if (id == null)
                 return BadRequest();
-            var department = unitOfWork.DepartmentRepository.Get(id.Value);
+            var department = unitOfWork.Repository<Department>().Get(id.Value);
             var mappedDep = mapper.Map<Department,DepartmentViewModel>(department);
             if (department == null)
                 return NotFound();
@@ -87,7 +87,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 try
                 {
                     var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
-                    unitOfWork.DepartmentRepository.Update(mappedDep);
+                    unitOfWork.Repository<Department>().Update(mappedDep);
                     unitOfWork.Complete();
                     return RedirectToAction(nameof(Index));
                 }
@@ -116,7 +116,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
             try
             {
                 var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
-                unitOfWork.DepartmentRepository.Delete(mappedDep);
+                unitOfWork.Repository<Department>().Delete(mappedDep);
                 unitOfWork.Complete();  
                 return RedirectToAction(nameof(Index));
             }

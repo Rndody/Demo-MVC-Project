@@ -29,10 +29,11 @@ namespace MVC_Project_Presentation_Layer.Controllers
         public IActionResult Index(string searchInput) //[HttpGet] or [HttpPost in case of Search] 
         {
             var employees = Enumerable.Empty<Employee>();
+            var emploeeRepo=unitOfWork.Repository<Employee>() as EmployeeRepository;
             if (string.IsNullOrEmpty(searchInput))
-                employees = unitOfWork.EmployeeRepository.GetAll();
+                employees =/* unitOfWork.EmployeeRepository*/emploeeRepo.GetAll();
             else
-                employees = unitOfWork.EmployeeRepository.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
+                employees = /* unitOfWork.EmployeeRepository*/emploeeRepo.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
 
             var mappedEmps = mapper.Map<   IEnumerable<Employee>, IEnumerable< EmployeeViewModel >  > (employees);
 
@@ -85,7 +86,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                  * create Helper Folder that contains helper classes in the PL ----> create MappingProfiles class
                  */
               //  var count = employeeRepo.Add(mappedEmp);
-              unitOfWork.EmployeeRepository.Add(mappedEmp);
+              unitOfWork.Repository<Employee>().Add(mappedEmp);
                 var count = unitOfWork.Complete(); //replaces SaveChanges(); which returns no. of rows affected
                 ///TempData
                 if (count > 0)
@@ -102,7 +103,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         {
             if (id == null)
                 return BadRequest();
-            var employee = unitOfWork.EmployeeRepository.Get(id.Value);
+            var employee = unitOfWork.Repository<Employee>().Get(id.Value);
 
             var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
 
@@ -135,7 +136,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 try
                 {
                     var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-                    unitOfWork.EmployeeRepository.Update(mappedEmp);
+                    unitOfWork.Repository<Employee>().Update(mappedEmp);
                     unitOfWork.Complete();//remember we removed the savechanges from the methods in the repository so we need to use it here 
                     return RedirectToAction(nameof(Index));
                 }
@@ -165,7 +166,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
             {
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
 
-                unitOfWork.EmployeeRepository.Delete(mappedEmp);
+                unitOfWork.Repository<Employee>().Delete(mappedEmp);
                 unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
