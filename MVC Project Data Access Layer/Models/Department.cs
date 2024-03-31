@@ -1,24 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MVC_Project_Data_Access_Layer.Models
 {
-    public class Department
+    public class Department: ModelBase
     {
-        public int Id { get; set; }// for us as developes won't show for end user
+        //  public int Id { get; set; }// for us as developes won't show for end user
 
+        #region Properties
         public string Code { get; set; } //  end user can deal with it 
 
         public string Name { get; set; }
 
         public DateTime DateOfCreation { get; set; }
+        #endregion
 
-
-
+        #region Navigional Property [Many]
+        //[InverseProperty(nameof(Employee.Department))]
+        public ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
+        //to get any department we need to load the employees in the department inside this property
+        //when we create object from department we need to Initialize the Employees propery in object so that we load the objects inside it 
+        //so we say this property = new HashSet<Employee>() => [Initialize the Employees propery- in object]
+        #endregion
 
         #region for discussion
 
