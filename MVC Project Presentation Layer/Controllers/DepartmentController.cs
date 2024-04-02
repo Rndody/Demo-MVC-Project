@@ -69,6 +69,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 return NotFound();
             return View(ViewName, mappedDep);
         }
+        //-------------------- Edit ------------------------
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -82,12 +83,10 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
             return Details(id, "Edit");
         }
-        //-------------------- Edit ------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(DepartmentViewModel departmentVM, [FromRoute] int id)
         {
-
             if (id != departmentVM.Id) return BadRequest();
             if (ModelState.IsValid)
             {

@@ -19,7 +19,6 @@ namespace MVC_Project_Business_Logic_Layer
         //public IEmployeeRepository EmployeeRepository { get; set; } = null;
         //public IDepartmentRepository DepartmentRepository { get; set; } = null; 
         #endregion
-
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -40,6 +39,7 @@ namespace MVC_Project_Business_Logic_Layer
             var key = typeof(T).Name;
             #region temporary till we discuss specificatio design pattern
             if (!repositories.ContainsKey(key))
+            //if doesn't contain the key create object as if the key is included means we already have object and no need to create new one
             {
                 if (key == nameof(Employee))
                 {
@@ -53,10 +53,11 @@ namespace MVC_Project_Business_Logic_Layer
                 }
             }
             #endregion
-            return new GenericRepository<T>(dbContext) as IGenericRepository<T>;
+            //  return new GenericRepository<T>(dbContext) as IGenericRepository<T>;
+            return repositories[key] as IGenericRepository<T>;
         }
-        public int Complete()        => dbContext.SaveChanges();
-        public void Dispose()            => dbContext.Dispose(); //to close the connection
+        public int Complete() => dbContext.SaveChanges();
+        public void Dispose() => dbContext.Dispose(); //to close the connection
 
 
     }

@@ -136,7 +136,6 @@ namespace MVC_Project_Presentation_Layer.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(EmployeeViewModel employeeVM, [FromRoute] int id)
         {
-
             if (id != employeeVM.Id) return BadRequest();
             if (ModelState.IsValid)
             {
