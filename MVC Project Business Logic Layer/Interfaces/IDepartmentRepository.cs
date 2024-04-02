@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Business_Logic_Layer.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository : IGenericRepository<Department>
     {
+        #region  Deleted Code
         //define 5 signatures for 5 methods
-        IEnumerable<Department> GetAll();
-        Department Get(int id);
-        int Add(Department entity);
-        int Update(Department entity);
-        int Delete(Department entity);
-
-
+        //IEnumerable<Department> GetAll();
+        //Department Get(int id);
+        //int Add(Department entity);
+        //int Update(Department entity);
+        //int Delete(Department entity); 
+        #endregion
     }
 }
