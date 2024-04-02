@@ -20,6 +20,8 @@ namespace MVC_Project_Presentation_Layer.Controllers
         #region Constructor
         public DepartmentController(IMapper mapper, IUnitOfWork unitOfWork/*IDepartmentRepository departmentRepository*/)
         {
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
             //departmentRepo = departmentRepository;
         }
 
@@ -28,15 +30,12 @@ namespace MVC_Project_Presentation_Layer.Controllers
         #region Methods
         //-------------------------- Index ---------------------
         public IActionResult Index()
-        {
-            //------------ NullReferenceException: Object reference not set to an instance of an object in line 27!!!!
+        {           
             var departments = unitOfWork.Repository<Department>().GetAll();
 
             var mappedDeps = mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
 
             return View(mappedDeps);
-
-
         }
         [HttpGet]
         //------------------------ Create -----------------------
