@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Data_Access_Layer.Data
 {
-    public class ApplicationDbContext : /*DbContext*/ IdentityDbContext
+    public class ApplicationDbContext : /*DbContext*/ IdentityDbContext <ApplicationUser>
     {
         ///DbSets
         public DbSet<Department> Departments { get; set; }
