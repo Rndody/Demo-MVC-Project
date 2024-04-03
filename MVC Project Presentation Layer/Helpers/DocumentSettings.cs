@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MVC_Project_Presentation_Layer.Helpers
 {
     public static class DocumentSettings
     {
-        public static string UploadFile(IFormFile file, string folderName) //IFormFile is the form that have the input that the user will upload the file in it
+        public static async Task<string> UploadFile(IFormFile file, string folderName) //IFormFile is the form that have the input that the user will upload the file in it
         {
             ///1. get located folder path
             ///string folderPath = $"F:\\Back-End\\Assignments\\MVC\\Demo MVC Project\\MVC Project Presentation Layer\\wwwroot\\Files\\{folderName}";
@@ -22,7 +23,7 @@ namespace MVC_Project_Presentation_Layer.Helpers
             string filePath = Path.Combine(folderPath, fileName);
             ///4. save file as streams [data per time]
             var fileStream = new FileStream(filePath, FileMode.Create);
-            file.CopyTo(fileStream);
+          await  file.CopyToAsync(fileStream);
             return fileName;
         }
 

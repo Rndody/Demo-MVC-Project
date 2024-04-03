@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Business_Logic_Layer.Interfaces
 {
-    public interface IGenericRepository <T>  where T : ModelBase   //public => use it outside BLL
+    public interface IGenericRepository<T> where T : ModelBase   //public => use it outside BLL
     {
         //define 5 signatures for 5 methods
-        IEnumerable<T> GetAll();
-        T Get(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetAsync(int id);
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);

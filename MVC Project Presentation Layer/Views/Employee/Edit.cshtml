@@ -4,11 +4,10 @@
 }
 
 <h1>Edit @Model.Name Employee</h1>
-<br />
-<br />
+
 <div asp-validation-summary="All">
 </div>
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
 
     <partial name="PartialViews/CreateEditEmployeePartial" />
 

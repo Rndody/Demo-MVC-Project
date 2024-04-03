@@ -56,8 +56,8 @@ namespace MVC_Project_Business_Logic_Layer
             //  return new GenericRepository<T>(dbContext) as IGenericRepository<T>;
             return repositories[key] as IGenericRepository<T>;
         }
-        public int Complete() => dbContext.SaveChanges();
-        public void Dispose() => dbContext.Dispose(); //to close the connection
+        public async Task<int> Complete() => await dbContext.SaveChangesAsync();
+        public async ValueTask DisposeAsync() => await dbContext.DisposeAsync(); //to close the connection
 
 
     }

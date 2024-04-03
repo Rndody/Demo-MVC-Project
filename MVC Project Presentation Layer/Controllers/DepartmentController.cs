@@ -5,6 +5,7 @@ using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Models;
 using MVC_Project_Presentation_Layer.ViewModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
@@ -29,9 +30,9 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
         #region Methods
         //-------------------------- Index ---------------------
-        public IActionResult Index()
-        {           
-            var departments = unitOfWork.Repository<Department>().GetAll();
+        public async Task<IActionResult> Index()
+        {
+            var departments = await unitOfWork.Repository<Department>().GetAllAsync();
 
             var mappedDeps = mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
 
@@ -44,26 +45,24 @@ namespace MVC_Project_Presentation_Layer.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(DepartmentViewModel departmentVM)
+        public async Task<IActionResult> Create(DepartmentViewModel departmentVM)
         {
             if (ModelState.IsValid)
             {
                 var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
                 unitOfWork.Repository<Department>().Add(mappedDep);
-                var count = unitOfWork.Complete();
+                var count = await unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
-
             }
-
             return View(departmentVM);
         }
 
         //------------------------------ Details -------------------------
-        public IActionResult Details(int? id, string ViewName = "Details")
+        public async Task<IActionResult> Details(int? id, string ViewName = "Details")
         {
             if (id == null)
                 return BadRequest();
-            var department = unitOfWork.Repository<Department>().Get(id.Value);
+            var department = await unitOfWork.Repository<Department>().GetAsync(id.Value);
             var mappedDep = mapper.Map<Department, DepartmentViewModel>(department);
             if (department == null)
                 return NotFound();
@@ -71,7 +70,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
         //-------------------- Edit ------------------------
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             ///if (id == null)
             ///    return BadRequest();
@@ -81,11 +80,11 @@ namespace MVC_Project_Presentation_Layer.Controllers
             ///return View(department);
             ///
 
-            return Details(id, "Edit");
+            return await Details(id, "Edit");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(DepartmentViewModel departmentVM, [FromRoute] int id)
+        public async Task<IActionResult> Edit(DepartmentViewModel departmentVM, [FromRoute] int id)
         {
             if (id != departmentVM.Id) return BadRequest();
             if (ModelState.IsValid)
@@ -94,7 +93,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 {
                     var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
                     unitOfWork.Repository<Department>().Update(mappedDep);
-                    unitOfWork.Complete();
+                    await unitOfWork.Complete();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception exception)
@@ -106,24 +105,18 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
         //-------------------- Delete ------------------------
         [HttpGet]
-        public IActionResult Delete(int? id)
-
-        {
-            return Details(id, "Delete");
-
-        }
+        public async Task<IActionResult> Delete(int? id)
+        { return await Details(id, "Delete"); }
 
         [HttpPost]
-        public IActionResult Delete(DepartmentViewModel departmentVM, [FromRoute] int id)
+        public async Task<IActionResult> Delete(DepartmentViewModel departmentVM, [FromRoute] int id)
         {
-
             if (id != departmentVM.Id) return BadRequest();
-
             try
             {
                 var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
                 unitOfWork.Repository<Department>().Delete(mappedDep);
-                unitOfWork.Complete();
+                await unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             catch (System.Exception exception)

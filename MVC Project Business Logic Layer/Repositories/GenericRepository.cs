@@ -23,7 +23,7 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
         {
             // dbContext.Set<T>().Add(entity);
             dbContext.Add(entity);
-           // return dbContext.SaveChanges();
+            // return dbContext.SaveChanges();
         }
         public void Update(T entity)
         {
@@ -36,20 +36,21 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
         {
             //dbContext.Set<T>().Remove(entity);
             dbContext.Remove(entity);
-          //  return dbContext.SaveChanges();
+            //  return dbContext.SaveChanges();
         }
 
-        public T Get(int id)
-       => dbContext.Find<T>(id);
+        public async Task<T> GetAsync(int id)
+       => await dbContext.FindAsync<T>(id);
         // var Employee = dbContext.Employees.Where(E => E.Id == id).FirstOrDefault();        
 
-        public IEnumerable<T> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             if (typeof(T) == typeof(Employee))
-                return (IEnumerable<T>)  dbContext.Employees.Include(E => E.Department).AsNoTracking();
+                return (IEnumerable<T>)await dbContext.Employees.Include(E => E.Department).AsNoTracking().ToListAsync();
+            // return (IEnumerable<T>) await dbContext.Set<Employee>().Include(E => E.Department).AsNoTracking().ToListAsync();
             //note: casting to IEnumerable<T> from  IEnumerable<Employee>
-            else
-                return dbContext.Set<T>().AsNoTracking().ToList();
+
+            return await dbContext.Set<T>().AsNoTracking().ToListAsync();
         }
     }
 }

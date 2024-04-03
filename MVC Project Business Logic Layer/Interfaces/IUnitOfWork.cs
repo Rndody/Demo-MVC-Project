@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Business_Logic_Layer.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IAsyncDisposable
     {
         IGenericRepository<T> Repository<T>() where T : ModelBase;
-        int Complete();// number of rows that will be affected --> SaveChanges()
+        Task<int> Complete();// number of rows that will be affected --> SaveChanges()
 
         #region Wrong implementaion 
         ///  public IEmployeeRepository EmployeeRepository { get; set; }

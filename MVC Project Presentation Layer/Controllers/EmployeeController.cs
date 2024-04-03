@@ -8,6 +8,7 @@ using MVC_Project_Presentation_Layer.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Threading.Tasks;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
@@ -33,12 +34,12 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
         #region Methods
         //-------------------------- Index ---------------------
-        public IActionResult Index(string searchInput) //[HttpGet] or [HttpPost in case of Search] 
+        public async Task<IActionResult> Index(string searchInput) //[HttpGet] or [HttpPost in case of Search] 
         {
             var employees = Enumerable.Empty<Employee>();
             var emploeeRepo = unitOfWork.Repository<Employee>() as EmployeeRepository;
             if (string.IsNullOrEmpty(searchInput))
-                employees =/* unitOfWork.EmployeeRepository*/emploeeRepo.GetAll();
+                employees = await /* unitOfWork.EmployeeRepository*/emploeeRepo.GetAllAsync();
             else
                 employees = /* unitOfWork.EmployeeRepository*/emploeeRepo.SearchByName(searchInput.ToLower());  //create method to search by name in the BLL 
 
@@ -67,7 +68,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(EmployeeViewModel employeeVM)///Create --- 1st action [request]
+        public async Task<IActionResult> Create(EmployeeViewModel employeeVM)///Create --- 1st action [request]
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +89,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 /// Employee mappedEmp = (Employee) employeeVM;
                 /// 
                 //------------------------------------------------------------------------
-                employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images"); //save the image before SaveChanges
+                employeeVM.ImageName = await DocumentSettings.UploadFile(employeeVM.Image, "Images"); //save the image before SaveChanges
                 ///AutoMapper
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                 /* the automapper need to learn how to make mapping for my classes so we make a profile
@@ -97,7 +98,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 //  var count = employeeRepo.Add(mappedEmp);
 
                 unitOfWork.Repository<Employee>().Add(mappedEmp);
-                var count = unitOfWork.Complete(); //replaces SaveChanges(); which returns no. of rows affected
+                var count = await unitOfWork.Complete(); //replaces SaveChanges(); which returns no. of rows affected
                 ///TempData
                 if (count > 0)
                     TempData["Message"] = "Created Successfully";//info we need to send to 2nd request
@@ -109,25 +110,25 @@ namespace MVC_Project_Presentation_Layer.Controllers
         }
 
         //------------------------------ Details -------------------------
-        public IActionResult Details(int? id, string ViewName = "Details")
+        public async Task<IActionResult> Details(int? id, string ViewName = "Details")
         {
             if (id == null)
                 return BadRequest();
-            var employee = unitOfWork.Repository<Employee>().Get(id.Value);
+            var employee = await unitOfWork.Repository<Employee>().GetAsync(id.Value);
 
             var mappedEmp = mapper.Map<Employee, EmployeeViewModel>(employee);
 
             if (employee == null)
                 return NotFound();
 
-            if (ViewName.Equals("Delete",System.StringComparison.OrdinalIgnoreCase) || ViewName.Equals("Edit", System.StringComparison.OrdinalIgnoreCase))
-            TempData["ImageName"]=employee.ImageName;           
+            if (ViewName.Equals("Delete", System.StringComparison.OrdinalIgnoreCase) || ViewName.Equals("Edit", System.StringComparison.OrdinalIgnoreCase))
+                TempData["ImageName"] = employee.ImageName;
 
             return View(ViewName, mappedEmp);
         }
         //-------------------- Edit ------------------------
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             ///if (id == null)
             ///    return BadRequest();
@@ -137,29 +138,33 @@ namespace MVC_Project_Presentation_Layer.Controllers
             ///return View(employee);
             ///
             //ViewData["Departments"] = departmentRepository.GetAll();
-            return Details(id, "Edit");
+            return await Details(id, "Edit");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(EmployeeViewModel employeeVM, [FromRoute] int id)
+        public async Task<IActionResult> Edit(EmployeeViewModel employeeVM, [FromRoute] int id)
         {
             if (id != employeeVM.Id) return BadRequest();
             if (ModelState.IsValid)
             {
                 try
                 {
+                    employeeVM.ImageName = TempData["ImageName"] as string;
                     var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-                    unitOfWork.Repository<Employee>().Update(mappedEmp);
-                    #region cheack if image is changed
-                    if (employeeVM.ImageName != TempData["ImageName"] as string)
+                    #region check if image is changed
+                    if (mappedEmp.ImageName != null)
                     {
-                        DocumentSettings.DeleteFile(TempData["ImageName"] as string, "Images");
-                        employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
+                        if (mappedEmp.ImageName != TempData["ImageName"] as string)
+                        {
+                            DocumentSettings.DeleteFile(TempData["ImageName"] as string, "Images");
+                            mappedEmp.ImageName = await DocumentSettings.UploadFile(employeeVM.Image, "Images");
+                        }
                     }
                     #endregion
-                    unitOfWork.Complete();//remember we removed the savechanges from the methods in the repository so we need to use it here 
-                    
+                    unitOfWork.Repository<Employee>().Update(mappedEmp);
+                    await unitOfWork.Complete();//remember we removed the savechanges from the methods in the repository so we need to use it here 
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception exception)
@@ -172,15 +177,11 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
         //-------------------- Delete ------------------------
         [HttpGet]
-        public IActionResult Delete(int? id)
-
-        {
-            return Details(id, "Delete");
-
-        }
+        public async Task<IActionResult> Delete(int? id)
+        { return await Details(id, "Delete"); }
 
         [HttpPost]
-        public IActionResult Delete(EmployeeViewModel employeeVM, [FromRoute] int id)
+        public async Task<IActionResult> Delete(EmployeeViewModel employeeVM, [FromRoute] int id)
         {
             if (id != employeeVM.Id) return BadRequest();
             try
@@ -189,7 +190,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
 
                 unitOfWork.Repository<Employee>().Delete(mappedEmp);
-                var count = unitOfWork.Complete();
+                var count = await unitOfWork.Complete();
                 if (count > 0)
                 {
                     DocumentSettings.DeleteFile(employeeVM.ImageName, "Images");

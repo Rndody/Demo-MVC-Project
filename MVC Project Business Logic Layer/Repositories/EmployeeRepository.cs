@@ -23,8 +23,8 @@ namespace MVC_Project_Business_Logic_Layer.Repositories
         {
             return dbContext.Employees.Where(E => E.Address.ToLower() == address.ToLower());
         }
-
-        public IQueryable<Employee> SearchByName(string name)
+     //   public override async Task<IEnumerable<Employee>> GetAllAsync()=> await dbContext.Set<Employee>().Include(E=>E.Department).AsNoTracking().ToListAsync();
+       public IQueryable<Employee> SearchByName(string name)
                => dbContext.Employees.Where(E=>E.Name.ToLower().Contains(name) );
         #region Deleted Code
         // private readonly ApplicationDbContext dbContext;
