@@ -1,6 +1,7 @@
 ﻿using MVC_Project_Data_Access_Layer.Models;
 using System.ComponentModel.DataAnnotations;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace MVC_Project_Presentation_Layer.ViewModels
 {
@@ -49,6 +50,9 @@ namespace MVC_Project_Presentation_Layer.ViewModels
         #region Navigional Property [One]       
         public Department Department { get; set; }
         #endregion
+        ///adding property to display the image 
+        public IFormFile Image { get; set; }
+        public string ImageName { get; set; }
 
 
 

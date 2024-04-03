@@ -41,8 +41,12 @@ namespace MVC_Project_Data_Access_Layer.Models
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
         #endregion
+
+        /// image name property  
+        public string ImageName { get; set; }
+
         #region Foreign  Key
-        public int? DepartmentId { get; set; }       
+        public int? DepartmentId { get; set; }
         #endregion
         #region Navigional Property [One]        
         public Department Department { get; set; }

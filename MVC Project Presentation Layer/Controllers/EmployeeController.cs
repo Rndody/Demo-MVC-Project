@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
 using MVC_Project_Data_Access_Layer.Models;
+using MVC_Project_Presentation_Layer.Helpers;
 using MVC_Project_Presentation_Layer.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
@@ -85,13 +87,15 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 ///2nd way ---> overload the casting operator                
                 /// Employee mappedEmp = (Employee) employeeVM;
                 /// 
-           //------------------------------------------------------------------------
+                //------------------------------------------------------------------------
+                employeeVM.ImageName= DocumentSettings.UploadFile(employeeVM.Image, "Images"); //save the image before SaveChanges
                 ///AutoMapper
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                 /* the automapper need to learn how to make mapping for my classes so we make a profile
                  * create Helper Folder that contains helper classes in the PL ----> create MappingProfiles class
                  */
                 //  var count = employeeRepo.Add(mappedEmp);
+               
                 unitOfWork.Repository<Employee>().Add(mappedEmp);
                 var count = unitOfWork.Complete(); //replaces SaveChanges(); which returns no. of rows affected
                 ///TempData
