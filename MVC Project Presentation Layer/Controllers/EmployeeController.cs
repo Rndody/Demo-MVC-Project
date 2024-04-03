@@ -88,14 +88,14 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 /// Employee mappedEmp = (Employee) employeeVM;
                 /// 
                 //------------------------------------------------------------------------
-                employeeVM.ImageName= DocumentSettings.UploadFile(employeeVM.Image, "Images"); //save the image before SaveChanges
+                employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images"); //save the image before SaveChanges
                 ///AutoMapper
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                 /* the automapper need to learn how to make mapping for my classes so we make a profile
                  * create Helper Folder that contains helper classes in the PL ----> create MappingProfiles class
                  */
                 //  var count = employeeRepo.Add(mappedEmp);
-               
+
                 unitOfWork.Repository<Employee>().Add(mappedEmp);
                 var count = unitOfWork.Complete(); //replaces SaveChanges(); which returns no. of rows affected
                 ///TempData
@@ -119,6 +119,10 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
             if (employee == null)
                 return NotFound();
+
+            if (ViewName.Equals("Delete",System.StringComparison.OrdinalIgnoreCase) || ViewName.Equals("Edit", System.StringComparison.OrdinalIgnoreCase))
+            TempData["ImageName"]=employee.ImageName;           
+
             return View(ViewName, mappedEmp);
         }
         //-------------------- Edit ------------------------
@@ -147,7 +151,15 @@ namespace MVC_Project_Presentation_Layer.Controllers
                 {
                     var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                     unitOfWork.Repository<Employee>().Update(mappedEmp);
+                    #region cheack if image is changed
+                    if (employeeVM.ImageName != TempData["ImageName"] as string)
+                    {
+                        DocumentSettings.DeleteFile(TempData["ImageName"] as string, "Images");
+                        employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
+                    }
+                    #endregion
                     unitOfWork.Complete();//remember we removed the savechanges from the methods in the repository so we need to use it here 
+                    
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception exception)
@@ -170,16 +182,20 @@ namespace MVC_Project_Presentation_Layer.Controllers
         [HttpPost]
         public IActionResult Delete(EmployeeViewModel employeeVM, [FromRoute] int id)
         {
-
             if (id != employeeVM.Id) return BadRequest();
-
             try
             {
+                employeeVM.ImageName = TempData["ImageName"] as string;
                 var mappedEmp = mapper.Map<EmployeeViewModel, Employee>(employeeVM);
 
                 unitOfWork.Repository<Employee>().Delete(mappedEmp);
-                unitOfWork.Complete();
-                return RedirectToAction(nameof(Index));
+                var count = unitOfWork.Complete();
+                if (count > 0)
+                {
+                    DocumentSettings.DeleteFile(employeeVM.ImageName, "Images");
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(employeeVM);
             }
             catch (System.Exception exception)
             {
