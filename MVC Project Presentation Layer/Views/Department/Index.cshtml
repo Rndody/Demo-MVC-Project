@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Department>
+﻿@model IEnumerable<DepartmentViewModel>
 @{
     ViewData["Title"] = "All Departments";
 }
@@ -29,7 +29,12 @@
                     <td>@department.Code</td>
                     <td>@department.Name</td>
                     <td>@department.DateOfCreation</td>
+
+                    <partial name="_ButtonsPartial" model="@department.Id" />
+
+
                 </tr>
+               
             }
         </tbody>
     </table>
