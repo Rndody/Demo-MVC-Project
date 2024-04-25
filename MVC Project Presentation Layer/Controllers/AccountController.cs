@@ -92,8 +92,25 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
         #endregion
 
-        
+
         #region Forget Password
+        public IActionResult ForgetPassword() => View();
+
+
+        [HttpPost]
+        public async Task<IActionResult> SendResetPasswordEmail(ForgetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user= await  userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                { 
+
+                }
+                ModelState.AddModelError(string.Empty, "no such account here");
+                    }
+            return View(model);
+        }
 
         #endregion
     }

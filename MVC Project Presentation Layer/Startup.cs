@@ -74,9 +74,9 @@ namespace MVC_Project_Presentation_Layer
             services.ConfigureApplicationCookie(options =>//configurations for default schema  whatever what is the default one 
             {
                 //options.LogoutPath = "";
-                options.LoginPath = "Account/SignIn";
+                options.LoginPath = "/Account/SignIn";
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
-                options.AccessDeniedPath = /*"/Account/AccessDenied"*/"Home/Error";
+                options.AccessDeniedPath = /*"/Account/AccessDenied"*/"/Home/Error";
             }
             );
             services.AddAuthentication(options =>
@@ -86,9 +86,9 @@ namespace MVC_Project_Presentation_Layer
             }) 
                .AddCookie("hmbozo", options=>
             {
-                options.LoginPath = "Account/SignIn";
+                options.LoginPath = "/Account/SignIn";
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
-                options.AccessDeniedPath = "Home/Error";
+                options.AccessDeniedPath = "/Home/Error";
             })   ;
 
             #region Commented Code
