@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Project_Data_Access_Layer.Models;
+using MVC_Project_Presentation_Layer.Services.EmailSender;
 using MVC_Project_Presentation_Layer.ViewModels.Account;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController( IEmailSender emailSender,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
