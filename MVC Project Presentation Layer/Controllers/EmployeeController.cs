@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         #region Attributes

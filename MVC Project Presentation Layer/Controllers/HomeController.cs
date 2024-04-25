@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MVC_Project_Presentation_Layer.ViewModels;
 using System;
@@ -9,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Presentation_Layer.Controllers
 {
+    //  [Authorize(Roles ="Admin"/*, AuthenticationSchemes ="Identity.Application"*/)]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -28,6 +31,8 @@ namespace MVC_Project_Presentation_Layer.Controllers
             return View();
         }
 
+
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

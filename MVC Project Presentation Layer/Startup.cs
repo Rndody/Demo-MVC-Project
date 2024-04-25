@@ -71,7 +71,25 @@ namespace MVC_Project_Presentation_Layer
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
 
-            //	services.AddAuthentication();
+            services.ConfigureApplicationCookie(options =>//configurations for default schema  whatever what is the default one 
+            {
+                //options.LogoutPath = "";
+                options.LoginPath = "Account/SignIn";
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.AccessDeniedPath = /*"/Account/AccessDenied"*/"Home/Error";
+            }
+            );
+            services.AddAuthentication(options =>
+            {
+                //options.DefaultAuthenticateScheme = "hmbozo";//changed the default application schema
+
+            }) 
+              /*  .AddCookie("hmbozo", options=>
+            {
+                options.LoginPath = "Account/SignIn";
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.AccessDeniedPath = "Home/Error";
+            }) */  ;
 
             #region Commented Code
             //services.AddScoped<ApplicationDbContext>();     
@@ -103,6 +121,7 @@ namespace MVC_Project_Presentation_Layer
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
