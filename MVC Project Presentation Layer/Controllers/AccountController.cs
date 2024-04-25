@@ -133,6 +133,7 @@ namespace MVC_Project_Presentation_Layer.Controllers
 
 
         #region Reset Password
+        [HttpGet]
         public IActionResult ResetPassword(string email, string token)
         {
             TempData["Email"] = email;
