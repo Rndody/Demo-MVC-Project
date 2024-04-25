@@ -2,6 +2,7 @@
 using MVC_Project_Business_Logic_Layer;
 using MVC_Project_Business_Logic_Layer.Interfaces;
 using MVC_Project_Business_Logic_Layer.Repositories;
+using MVC_Project_Presentation_Layer.Services.EmailSender;
 
 namespace MVC_Project_Presentation_Layer.Helpers
 {
@@ -13,7 +14,8 @@ namespace MVC_Project_Presentation_Layer.Helpers
             ///objects from those classes are not needed any more in the DI container we created them in the UnitOfWork class 
             ///services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             ///services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
+            
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services; //we return the container of the DI so that we can call the extension methods in one line using . dot

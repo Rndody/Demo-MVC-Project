@@ -69,7 +69,9 @@ namespace MVC_Project_Presentation_Layer
 
                 //options.User.AllowedUserNameCharacters = "qwerttyuioplkjhhgffdazxcvbbnmm";
                 options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>//configurations for default schema  whatever what is the default one 
             {
@@ -83,13 +85,13 @@ namespace MVC_Project_Presentation_Layer
             {
                 //options.DefaultAuthenticateScheme = "hmbozo";//changed the default application schema
 
-            }) 
-               .AddCookie("hmbozo", options=>
+            })
+               .AddCookie("hmbozo", options =>
             {
                 options.LoginPath = "/Account/SignIn";
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
                 options.AccessDeniedPath = "/Home/Error";
-            })   ;
+            });
 
             #region Commented Code
             //services.AddScoped<ApplicationDbContext>();     
