@@ -84,12 +84,12 @@ namespace MVC_Project_Presentation_Layer
                 //options.DefaultAuthenticateScheme = "hmbozo";//changed the default application schema
 
             }) 
-              /*  .AddCookie("hmbozo", options=>
+               .AddCookie("hmbozo", options=>
             {
                 options.LoginPath = "Account/SignIn";
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
                 options.AccessDeniedPath = "Home/Error";
-            }) */  ;
+            })   ;
 
             #region Commented Code
             //services.AddScoped<ApplicationDbContext>();     

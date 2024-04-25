@@ -81,5 +81,20 @@ namespace MVC_Project_Presentation_Layer.Controllers
             return View(model);
         }
         #endregion
+
+        #region Sign-Out
+
+        public async new Task<IActionResult> SignOut()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction(nameof(SignIn));
+        }
+
+        #endregion
+
+        
+        #region Forget Password
+
+        #endregion
     }
 }
