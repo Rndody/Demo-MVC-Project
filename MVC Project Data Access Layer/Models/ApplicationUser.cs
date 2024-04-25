@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MVC_Project_Data_Access_Layer.Models
 {
-	public class ApplicationUser :IdentityUser
+	public class ApplicationUser : IdentityUser
 	{
 		public string FName { get; set; }
 		public string LName { get; set; }
-		public bool IsAgree{ get; set; }
+		public bool IsAgree { get; set; }
 	}
 }

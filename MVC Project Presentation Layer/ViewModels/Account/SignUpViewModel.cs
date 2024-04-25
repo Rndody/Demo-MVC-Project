@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MVC_Project_Presentation_Layer.ViewModels.User
+namespace MVC_Project_Presentation_Layer.ViewModels.Account
 {
 	public class SignUpViewModel
 	{
